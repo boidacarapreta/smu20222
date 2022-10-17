@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  TemplateBucketName:
+    Type: String
+    Default: smu20222
+  Prefix:
+    Type: String
+    Default: smu20222
+  HTTPPort:
+    Type: Number
+    Default: 80
+  HTTPSPort:
+    Type: Number
+    Default: 443
+  TaskCpu:
+    Type: Number
+    Default: 512
+  TaskMemory:
+    Type: Number
+    Default: 1024
+
+Resources:
+  VPCStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://${TemplateBucketName}.s3.${AWS::Region}.amazonaws.com/1-vpc.yaml"
+      Parameters:
+        AvailabilityZone: a
+        CidrIp: 10.0.1.0/24
+        HTTPPort: !Ref HTTPPort
+        HTTPSPort: !Ref HTTPSPort
+        Prefix: !Ref Prefix
+        VPCCidrBlock: 10.0.0.0/16
+  FargateStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn:
+      - VPCStack
+    Properties:
+      TemplateURL: !Sub "https://${TemplateBucketName}.s3.${AWS::Region}.amazonaws.com/2-fargate.yaml"
+      Parameters:
+        ContainerSecurityGroup: !GetAtt VPCStack.Outputs.ContainerSecurityGroup
+        Prefix: !Ref Prefix
+        PublicSubnet: !GetAtt VPCStack.Outputs.PublicSubnet
+        RepositoryName:
+          Fn::ImportValue: !Sub "${Prefix}-RepositoryName"
+        TaskCpu: !Ref TaskCpu
+        TaskMemory: !Ref TaskMemory

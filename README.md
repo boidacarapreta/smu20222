@@ -15,6 +15,7 @@ ssh-keygen -t ed25519 -C <nome-da-chave> -f <arquivo>
 Adicionar as seguintes permitessões ao grupo de operadores:
 
 - `AmazonEC2FullAccess`
+- `AmazonS3FullAccess`
 - `AmazonVPCFullAccess`
 - `AmazonSSMReadOnlyAccess`
 - `AWSCloudFormationFullAccess`
@@ -55,3 +56,5 @@ onde `<nome-da-chave>` é o mesmo valor informado para criar a chave pública em
 ```sh
 aws cloudformation delete-stack --stack-name <nome-da-pilha>
 ```
+
+https://awstut.com/en/2022/01/25/introduction-to-fargate-with-cloudformation/
