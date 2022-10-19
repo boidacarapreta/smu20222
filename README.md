@@ -58,3 +58,5 @@ aws cloudformation delete-stack --stack-name <nome-da-pilha>
 ```
 
 https://awstut.com/en/2022/01/25/introduction-to-fargate-with-cloudformation/
+
+https://reflectoring.io/aws-cloudformation-deploy-docker-image/
